@@ -133,9 +133,10 @@ defmodule GravityAssist do
   end
 
   def solve_next(x, y) do
-    case x do
-      x when x <= 99 -> solve_for(x + 1, y)
-      _ -> solve_next(0, y + 1)
+    case {x, y} do
+      {x, _} when x < 99 -> solve_for(x + 1, y)
+      {_, y} when y < 99 -> solve_next(0, y + 1)
+      _ -> nil
     end
   end
 
@@ -164,24 +165,24 @@ defmodule GravityAssist do
   end
 
   def add(program, pos) do
-    step(
-      List.replace_at(
-        program,
-        Enum.at(program, pos + 3),
-        Enum.at(program, Enum.at(program, pos + 1)) + Enum.at(program, Enum.at(program, pos + 2))
-      ),
-      pos + 4
+    program
+    |> List.replace_at(
+      Enum.at(program, pos + 3),
+      value_from_at(program, pos + 1) + value_from_at(program, pos + 2)
     )
+    |> step(pos + 4)
   end
 
   def mutiply(program, pos) do
-    step(
-      List.replace_at(
-        program,
-        Enum.at(program, pos + 3),
-        Enum.at(program, Enum.at(program, pos + 1)) * Enum.at(program, Enum.at(program, pos + 2))
-      ),
-      pos + 4
+    program
+    |> List.replace_at(
+      Enum.at(program, pos + 3),
+      value_from_at(program, pos + 1) * value_from_at(program, pos + 2)
     )
+    |> step(pos + 4)
+  end
+
+  def value_from_at(program, pos) do
+    Enum.at(program, Enum.at(program, pos))
   end
 end
