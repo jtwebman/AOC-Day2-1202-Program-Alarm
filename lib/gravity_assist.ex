@@ -124,9 +124,7 @@ defmodule GravityAssist do
   end
 
   def solve_for(x, y) do
-    test = try_solve(x, y)
-
-    case test do
+    case try_solve(x, y) do
       val when val == 19_690_720 -> 100 * x + y
       _ -> solve_next(x, y)
     end
